@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Assignment2 Xiaofeng Zhang</title>
+    <style>
+        body {
+            margin: 0;
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+    <!-- thrird party-->
+    <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./js/three.js"></script>
+    <script src="./js/WebGL.js"></script>
+    <script src="./js/OrbitControls.js"></script>
+    <!-- functions -->
+    <script src="./data/world.geo.js"></script>
+    <script src="data/data.js"></script>
+    <script src="data/country.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/init.js"></script>
+</head>
+
+<body>
+
+    <div id="mainview" onmouseover="controls.enabled = true;" onmousedown="mouseDown(event);" onmouseleave="controls.enabled=false">
+        <script src="./js/globe.js"></script>
+        <script>
+            var Click = false
+            var RightClick = false
+            var globe = initGlobe(R)
+            globe.position.x = 0
+            globe.position.y = 0
+            globe.rotation.z = 0.41
+            scene.add(globe)
+            controls.target = new THREE.Vector3(0, 0, 0)
+            const axisHelper = new THREE.AxisHelper(2000)
+            addCountry(globe)
+            let pointat = []
+            animate()
+        </script>
+
+    </div>
+    <div id="rightpanel">
+        <!-- timeline -->
+        <h1 id='time'>2021</h1>
+        <input type="range" id="timeline" min="1985" max="2021" step="1" oninput="time_update()" />
+        <div class="ChartDiv">
+            <!-- chart canvas & function-->
+            <canvas id="Barchart"></canvas>
+            <script src="charts/Bar.js"></script>
+
+            <!-- up date data-->
+            <script>
+                // set default value
+                document.getElementById("timeline").value = 2021
+            </script>
+        </div>
+
+    </div>
+    <!-- for left control panel-->
+    <div id="leftpanel">
+        <h2>&nbsp; </h2>
+        <div id='icons'>
+            <label>
+                <input type="radio" name="test" value="small" checked>
+                <img class="icon" id="Picon" src="./images/passenger.png" alt="Passenger" onclick="TOPIC = P;TOPIC_update()">
+            
+            </label>
+            <label>
+                <input type="radio" name="test" value="small" notchecked>
+                <img class="icon" id="Ficon" src="./images/freight.png" alt="Freight" onclick="TOPIC = F;TOPIC_update()">
+
+            </label>
+            <label>
+                <input type="radio" name="test" value="small" notchecked>
+                <img class="icon" id="Micon" src="./images/email.png" alt="Mail" onclick="TOPIC = M;TOPIC_update()">
+
+            </label>
+            <h2 id='cur_country'>Aus</h2>
+
+        </div>
+        <script>
+        </script>
+    </div>
+    <div id="bottompanel">
+        <div class="LineChartDiv">
+            <canvas id="LineChart"></canvas>
+            <script src="charts/Line.js"></script>
+        </div>
+
+
+    </div>
+    <div id="toppanel">
+        <h1>AUS Port Usage</h1>
+    </div>
+</body>
+
+</html>
