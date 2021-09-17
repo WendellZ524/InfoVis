@@ -1,7 +1,9 @@
 const P = 'Passengers';
 const F = 'Freight';
 const M = 'Mail';
+var globe = {};
 var TOPIC = P;
+var Top5 = []
 var curr_year = 2021;
 var R = 200
 var selected = 'New Zealand';

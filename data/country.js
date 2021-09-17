@@ -37,8 +37,8 @@ var allcountry = [{
     {
         "ID": "AM",
         "Country": "USA",
-        "lat": 40,
-        "lon": 45
+        "lat": 38,
+        "lon": -95
     },
     {
         "ID": "AN",

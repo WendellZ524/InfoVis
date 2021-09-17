@@ -99,8 +99,8 @@ function addCountry(globe) {
     if (countries[0] == null) countries.shift()
     for (let row of allcountry) {
         //clean not used data:
-        if (countries.includes(row.Country)) {
-            c = Cylinder(0xffcc66)
+        if (countries.includes(row.Country) && Top5.includes(row.Country)) {
+            c = Cylinder(0xffcc66) //gold
             xyz = coord2xyz(R + 5, row.lon, row.lat)
             coordVec3 = new THREE.Vector3(xyz.x, xyz.y, xyz.z).normalize();
             c.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), coordVec3);
@@ -124,7 +124,23 @@ function addCountry(globe) {
 
             c.name = row.Country;
             this.globe.add(c)
+        } else if (countries.includes(row.Country) && !Top5.includes(row.Country)) {
+
+            c = Cylinder(0x999999)
+            xyz = coord2xyz(R + 5, row.lon, row.lat)
+            coordVec3 = new THREE.Vector3(xyz.x, xyz.y, xyz.z).normalize();
+            c.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), coordVec3);
+            c.position.x = xyz['x'];
+            c.position.y = xyz['y'];
+            c.position.z = xyz['z'];
+            Aus.x = xyz.x
+            Aus.y = xyz.y
+            Aus.z = xyz.z
+
+            c.name = row.Country;
+            this.globe.add(c)
         }
+        //console.log(Top5)
         // Add Aus
 
 
@@ -223,7 +239,7 @@ function ray() {
     raycaster.setFromCamera(mouse, camera);
     var intersects = raycaster.intersectObjects(globe.children);
 
-
+    //**moue over actions */
     if (intersects.length > 1 && intersects[0].object.name != 'Insider') {
         if (!pointat.includes(intersects[0].object)) {
 
@@ -248,18 +264,23 @@ function ray() {
 
 
 
-
-    if (intersects.length <= 1 && pointat.length > 0) //do not point at country 
-    {
+    //**do not point at country */
+    if (intersects.length <= 1 && pointat.length > 0) {
         //restore the color
         pointat.forEach((stamp) => {
-            if (stamp.object.name != 'Australia') {
+            if (stamp.object.name != 'Australia' && Top5.includes(stamp.object.name)) { //Top5 countries
                 stamp.object.material.color = {
                     r: 255 / 255,
                     g: 204 / 255,
                     b: 102 / 255
                 }
-            } else {
+            } else if (stamp.object.name != 'Australia' && !Top5.includes(stamp.object.name)) {
+                stamp.object.material.color = {
+                    r: 153 / 255,
+                    g: 153 / 255,
+                    b: 153 / 255
+                }
+            } else { //AUS
                 stamp.object.material.color = {
                     r: 153 / 255,
                     g: 153 / 255,
@@ -277,11 +298,12 @@ function ray() {
         }
     }
     //console.log(pointat[pointat.length - 1])
-
+    //** left click event*/
     if (intersects.length > 1 && intersects[0].object.name != 'Insider' && intersects[0].object.name != selected && Click) {
         set_selected(intersects[0].object.name)
             //selected.country = intersects[0].object.name;
     }
+    //** right click event*/
     if (intersects.length > 1 && intersects[0].object.name != 'Insider' && intersects[0].object.name != selected && RightClick) {
 
         //selected.country = intersects[0].object.name;

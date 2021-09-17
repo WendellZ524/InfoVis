@@ -93,8 +93,8 @@ function Update_LineChart() {
 
     }
 
-    console.log(labels)
-        //console.log(Math.sum(Pout_data))
+
+    //console.log(Math.sum(Pout_data))
     if (TOPIC == P) {
         LineChart.data.datasets[0].data = Pin_data
         LineChart.data.datasets[1].data = Pout_data
@@ -131,8 +131,8 @@ function time_update() {
         dataset.data = table
     });
 
-    BarChart.update()
-    console.log('try to update bar')
+    BarChart.update();
+    Update_cone();
 }
 
 function TOPIC_update() {
@@ -162,12 +162,33 @@ function TOPIC_update() {
     getTop5()
     BarChart.update()
     Update_LineChart()
+    Update_cone()
+}
+
+function Update_cone() {
+    for (let child of globe.children) {
+        if (child.name != '' && child.name != 'Australia') {
+            child.material.color = {
+                r: 153 / 255,
+                g: 153 / 255,
+                b: 153 / 255
+            }
+
+        }
+        if (Top5.includes(child.name)) {
+            child.material.color = {
+                r: 255 / 255,
+                g: 204 / 255,
+                b: 102 / 255
+            }
+        }
+    }
 }
 
 function getTop5() {
     Top5 = []
     target_coord = []
-    console.log(bar_countries)
+
     for (i = 0; i < 5; i++)
         Top5.push(bar_countries[i])
     for (let row of allcountry) {
@@ -189,7 +210,7 @@ function getTop5() {
         }
 
     }
-    console.log(target_coord)
+
     for (let row of target_coord) {
 
         arcs.push(arc())
