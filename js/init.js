@@ -7,6 +7,13 @@ var R = 200
 var selected = 'New Zealand';
 var ClientX = 0
 var ClientY = 0
+var Line_tab = []
+var arcs = []
+var Aus = {
+    x: 0,
+    y: 0,
+    z: 0
+}
 
 function set_selected(name) {
     selected = name;
@@ -21,8 +28,6 @@ function select_callback() {
     //update dataset
     Update_LineChart()
     document.getElementById('cur_country').innerHTML = selected
-
-
 }
 filter_year(curr_year);
 var labels = []

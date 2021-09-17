@@ -51,7 +51,7 @@ let config = {
 
             let row = bar_countries[barNumber];
             console.log(row)  
-            selected = row 
+            set_selected(row)
             Update_LineChart()
         },
         aspectRatio: aspect,

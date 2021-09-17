@@ -42,23 +42,18 @@
             addCountry(globe)
             let pointat = []
             animate()
+            console.log(arcs)
         </script>
 
     </div>
     <div id="rightpanel">
-        <!-- timeline -->
         <h1 id='time'>2021</h1>
-        <input type="range" id="timeline" min="1985" max="2021" step="1" oninput="time_update()" />
         <div class="ChartDiv">
             <!-- chart canvas & function-->
             <canvas id="Barchart"></canvas>
             <script src="charts/Bar.js"></script>
 
-            <!-- up date data-->
-            <script>
-                // set default value
-                document.getElementById("timeline").value = 2021
-            </script>
+
         </div>
 
     </div>
@@ -93,7 +88,14 @@
             <script src="charts/Line.js"></script>
         </div>
 
+        <!-- timeline -->
 
+        <input type="range" id="timeline" min="1985" max="2021" step="1" oninput="time_update()" />
+        <!-- up date data-->
+        <script>
+            // set default value
+            document.getElementById("timeline").value = 2021
+        </script>
     </div>
     <div id="toppanel">
         <h1>AUS Port Usage</h1>

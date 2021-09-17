@@ -118,6 +118,10 @@ function addCountry(globe) {
             c.position.x = xyz['x'];
             c.position.y = xyz['y'];
             c.position.z = xyz['z'];
+            Aus.x = xyz.x
+            Aus.y = xyz.y
+            Aus.z = xyz.z
+
             c.name = row.Country;
             this.globe.add(c)
         }
@@ -128,14 +132,11 @@ function addCountry(globe) {
 
 }
 
-function coord2xyz(R, lon, lat) {
-    const _lon = lon * Math.PI / 180;
-    const _lat = lat * Math.PI / 180;
-    const x = R * Math.cos(_lat) * Math.sin(_lon);
-    const y = R * Math.sin(_lat);
-    const z = R * Math.cos(_lon) * Math.cos(_lat);
-    return { x, y, z };
-};
+
+
+
+
+
 
 function Cylinder(color) {
     let geo = new THREE.CylinderGeometry(2.5, 0, 10, 100, 100);
@@ -145,26 +146,6 @@ function Cylinder(color) {
     let mesh = new THREE.Mesh(geo, mat)
     return mesh
 }
-/*
-let lat1 = 42.5
-let lon1 = 1.5
-let lat2 = 24
-let lon2 = 54
-
-let p1 = coord2xyz(10, lon1, lat1)
-let p2 = coord2xyz(10, lon2, lat2)
-const testcoord = [
-    [42.5, 1.5, 24, 54],
-
-];
-// start V3, mid1 V3, mid2 V3, mid3 V3
-const testpoints = [
-
-]
-
-function arc()
-*/
-
 
 /**** 
  * background star
@@ -236,30 +217,38 @@ function onWindowResize() {
 }
 
 
+
 function ray() {
     var raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(mouse, camera);
     var intersects = raycaster.intersectObjects(globe.children);
 
 
-    if (intersects.length > 1 && intersects[0].object.name != 'Insider' && intersects[0].object.name != selected) {
+    if (intersects.length > 1 && intersects[0].object.name != 'Insider') {
         if (!pointat.includes(intersects[0].object)) {
 
             pointat.push(intersects[0])
-            intersects[0].object.material.color = {
-                r: 255 / 255,
-                g: 255 / 255,
-                b: 255 / 255
+            if (intersects[0].object.name != selected) {
+                intersects[0].object.material.color = {
+                    r: 255 / 255,
+                    g: 255 / 255,
+                    b: 255 / 255
+                }
+                intersects[0].object.scale.set(1.5, 1.5, 1.5)
             }
-            intersects[0].object.scale.set(1.5, 1.5, 1.5)
         }
-        if (document.getElementsByClassName('panel').length == 0)
+        if (document.getElementsByClassName('panel').length == 0) //hover panel
             showPanel()
         else {
-            document.getElementsByClassName('panel')[0].style.left = ClientX - 50 + 'px';
-            document.getElementsByClassName('panel')[0].style.top = ClientY - 70 + 'px';
+            document.getElementsByClassName('panel')[0].style.left = ClientX + 10 + 'px';
+            document.getElementsByClassName('panel')[0].style.top = ClientY - 120 + 'px';
+
         }
     }
+
+
+
+
     if (intersects.length <= 1 && pointat.length > 0) //do not point at country 
     {
         //restore the color
@@ -303,17 +292,72 @@ function ray() {
 function showPanel() {
     //console.log('Show panel')
     var node = document.getElementsByTagName("body")[0]
+    let value_in = 0;
+    let value_out = 0;
     var div = document.createElement("div");
     div.style.position = "absolute";
+    div.style.left = ClientX + 10 + 'px';
+    div.style.top = ClientY - 120 + 'px';
+    //div.style.color = 'white'
 
-    div.style.left = ClientX - 50 + 'px';
-    div.style.top = ClientY - 70 + 'px';
-    div.style.color = 'white'
-    img = document.createElement('p');
-    img.innerHTML = pointat[0].object.name
+    let c_name = document.createElement('p')
+    c_name.id = 'cty_display'
+    let c_data = document.createElement('p');
+    c_data.id = 'data_dispaly'
+    let obj;
+    obj = table.find(function(obj) {
+        //console.log(obj)
+        return obj.Port_Country === pointat[0].object.name;
+    })
+    let unit = ' (ton)'
+    console.log(obj)
+    if (!(!obj)) {
+        if (TOPIC == P) {
+            if (!obj.Passengers_In) {
+                console.log(Passengers_In + 'undef')
+            } else {
+                value_in += Number(obj.Passengers_In);
+            }
+            if (!obj.Passengers_Out) {
+                console.log(Passengers_Out + 'undef')
+            } else {
+                value_out += Number(obj.Passengers_Out)
+            }
+        } else if (TOPIC == F) {
+            if (!obj.Freight_In) {
+                console.log(Freight_In + 'undef')
+            } else {
+                value_in += Number(obj.Freight_In)
+                value_in += unit
+            }
+            if (!obj.Freight_Out) {
+                console.log(Freight_Out + 'undef')
+            } else {
+                value_out += Number(obj.Freight_Out)
+                value_out += unit
+            }
+        } else if (TOPIC == M) {
+            if (!obj.Mail_In) {
+                console.log(Mail_In + 'undef')
+            } else {
+                value_in += Number(obj.Mail_In)
+                value_in += unit
+            }
+            if (!obj.Mail_Out) {
+                console.log(Mail_Out + 'undef')
+            } else {
+                value_out += Number(obj.Mail_Out)
+                value_out += unit
+            }
+        }
+    }
+
+    let str = TOPIC + '&ensp;&ensp;in:  ' + value_in + '<br>' + TOPIC + ' out: ' + value_out
+    c_data.innerHTML = str;
+    c_name.innerHTML = pointat[0].object.name
     div.classList.add('panel');
-    img.src = 'images/email.png';
-    div.append(img);
+    div.append(c_name)
+    div.append(c_data);
     node.append(div);
     x = div;
     setTimeout("x.remove()", 50000);
@@ -327,7 +371,7 @@ function animate() {
     Click = false
     RightClick = false
     renderer.render(scene, camera);
-    pivot.rotation.y += 0.01
+    pivot.rotation.y += 0.01;
 }
 
 function mouseDown(e) {

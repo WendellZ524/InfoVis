@@ -36,7 +36,7 @@ var allcountry = [{
     },
     {
         "ID": "AM",
-        "Country": "Armenia",
+        "Country": "USA",
         "lat": 40,
         "lon": 45
     },
@@ -450,7 +450,7 @@ var allcountry = [{
     },
     {
         "ID": "GB",
-        "Country": "United Kingdom",
+        "Country": "UK",
         "lat": 54,
         "lon": -2
     },
@@ -549,6 +549,12 @@ var allcountry = [{
         "Country": "Guyana",
         "lat": 5,
         "lon": -59
+    },
+    {
+        "ID": "HK",
+        "Country": "Hong Kong (SAR)",
+        "lat": 22.25,
+        "lon": 114.17
     },
     {
         "ID": "HK",
